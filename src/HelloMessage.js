@@ -7,38 +7,47 @@ class HelloMessage extends React.Component {
       this.state = {
         inco6: '',
        // inco2: ''
+       image:""
       }
       
-      this.getImage('inco1')
-      //this.getImage('inco2')
      
     }
-    
-    getImage (image) {
+    componentDidUpdate(){
+    }
+    componentDidMount(){
+        this.getImage();
+    }
+    getImage () {
         const storage = firebase.storage().ref();   
+        const image = this.props.image;
+        let user = this.props.user;
+        user = user.replace('.',',');
       let { state } = this
-    storage.child(`/images/${image}.png`).getDownloadURL().then((url) => {
-        this.state[image] = url
+    storage.child(`/${user}/${image}`).getDownloadURL().then((url) => {
+        this.state.image = url
         this.setState(state)
       }).catch((error) => {
         // Handle any errors
       })
+      console.log(this.state)
+      return this.state.image;
     }
   
     render() {
       return (
         <div>
-          Hello Lithuania<br />
+          {/* Hello Lithuania<br />
           <img src={ this.state.inco1 } alt="Lithuanian flag" />
           <br />
           Hello United Kingdom<br />
           <img src={ this.state.inco3 } alt="UK flag" />
           { /* all the markup of your page */ }
-        <button onClick={() => this.setState({showModal: true})}>Add Work Log</button>
+        {/* <button onClick={() => this.setState({showModal: true})}>Add Work Log</button>
+        <button onClick={() => this.getImage(this.props.image)}>HOWDY</button> */} 
         { /* anything else */ }
 
         { /* modal is here but it is hidden */ }
-        <Modal open={this.state.showModal} image={this.state.inco1}>...</Modal>
+        <Modal open={this.state.showModal} image={this.state.image}>...</Modal>
         </div>
       );
     }

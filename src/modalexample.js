@@ -12,20 +12,20 @@ export default class ModalExampleControlled extends Component {
   render() {
     return (
       <Modal
-        trigger={<Button onClick={this.handleOpen}>Show Modal</Button>}
+        trigger={<Button onClick={this.handleOpen}>View Image</Button>}
         open={this.state.modalOpen}
         onClose={this.handleClose}
         basic
         size='large'
       >
-        <Header icon='browser' content='Cookies policy' />
+        <Header icon='browser' content='Unipi Android Database' />
         <Modal.Content>
-          <h3>This website uses cookies to ensure the best user experience.</h3>
+          <h1>Image From Firebase:</h1>
           <Image wrapped size='huge' src={this.props.image}/>
         </Modal.Content>
         <Modal.Actions>
           <Button color='green' onClick={this.handleClose} inverted>
-            <Icon name='checkmark' /> Got it
+            <Icon name='checkmark' /> Done
           </Button>
         </Modal.Actions>
       </Modal>
