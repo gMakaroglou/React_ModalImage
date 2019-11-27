@@ -8,11 +8,12 @@ import {
   TableRowColumn
 } from "material-ui/Table";
 import VisIcon from "material-ui/svg-icons/action/visibility";
-import Himodal from "./HelloMessage"
+import Himodal from "./ImageModal"
 const row = (x, i, header) =>
   <TableRow key={`tr-${i}`} >
   <TableRowColumn key={""} >
-     <Himodal user={x["user"]} image={x["imageid"]} onClick={console.log('hi')}/>
+     <Himodal user={x["user"]} image={x["imageId"]}/>
+     {console.log("Image "+x["imageId"])}
       </TableRowColumn>
     {header.map((y, k) =>
     
@@ -24,15 +25,6 @@ const row = (x, i, header) =>
   </TableRow>;
 
 export default ({ data, header }) => {
-  const handleeCellClick  = () =>
-{
-  //  if(row ==0)
-       console.log('Cigarette row clicked' + row);
-
-}
-const onCellClick = () =>{
-  console.log("hi");
-}
 return(
   <Table >
     <TableHeader>

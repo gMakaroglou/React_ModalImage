@@ -41,7 +41,8 @@ class FilteringComp extends Component{
             //   console.log()
             //   currentcolumns[("columnToQuery3")] = value
             //   this.setState({ columnsToQuery: currentcolumns ,columnToQuery3:value})
-            this.props.changeColumn(event,index,value);
+            console.log("THIIIIIIS PROPPPPPS FILTERNUMBER"+this.props.FilterNumber)
+            this.props.changeColumn(event,index,value,this.props.FilterNumber);
             //   this.setState({columnToQuery1 : value,
             // columnsToQuery : [...this.state.columnsToQuery,value]})
           }}
@@ -51,6 +52,7 @@ class FilteringComp extends Component{
           <MenuItem value={'lightValue'} primaryText="lightValue" />
           <MenuItem value={'longitudeValue'} primaryText="Longitude" />
           <MenuItem value={'pressureValue'} primaryText="Pressure" />
+          <MenuItem value={'tags'} primaryText="Tags" />
         </SelectField>
         <Fab color="secondary" size="small" aria-label="edit" style={{marginTop: '3%'}}>
 <DeleteIcon onClick={()=>this.props.hideFilter(this.props.FilterNumber)}/>

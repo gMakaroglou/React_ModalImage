@@ -12,14 +12,16 @@ class HelloMessage extends React.Component {
       
      
     }
-    componentDidUpdate(){
+    componentDidUpdate(){  
+
     }
     componentDidMount(){
         this.getImage();
     }
     getImage () {
+
         const storage = firebase.storage().ref();   
-        const image = this.props.image;
+        let image = this.props.image;
         let user = this.props.user;
         user = user.replace('.',',');
       let { state } = this
@@ -29,11 +31,18 @@ class HelloMessage extends React.Component {
       }).catch((error) => {
         // Handle any errors
       })
-      console.log(this.state)
-      return this.state.image;
+   //   console.log(this.state)
+      
     }
-  
+  shouldComponentUpdate(nextProps,nextState){
+    if(this.state !== nextState){
+      this.getImage();
+      return true;
+    }
+    return false;
+  }
     render() {
+
       return (
         <div>
           {/* Hello Lithuania<br />

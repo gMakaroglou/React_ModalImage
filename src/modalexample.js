@@ -10,6 +10,7 @@ export default class ModalExampleControlled extends Component {
   handleClose = () => this.setState({ modalOpen: false })
 
   render() {
+
     return (
       <Modal
         trigger={<Button onClick={this.handleOpen}>View Image</Button>}
