@@ -23,6 +23,7 @@ class HelloMessage extends React.Component {
         const storage = firebase.storage().ref();   
         let image = this.props.image;
         let user = this.props.user;
+        if(user!=undefined){
         user = user.replace('.',',');
       let { state } = this
     storage.child(`/${user}/${image}`).getDownloadURL().then((url) => {
@@ -32,7 +33,7 @@ class HelloMessage extends React.Component {
         // Handle any errors
       })
    //   console.log(this.state)
-      
+    }
     }
   shouldComponentUpdate(nextProps,nextState){
     if(this.state !== nextState){

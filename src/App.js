@@ -18,6 +18,7 @@ import orderBy from 'lodash.orderby'
 import { Divider, Form, Label } from 'semantic-ui-react'
 import './FlexBox.css'
 import FilteringComp from './FIlteringomponent'
+import { concat } from 'bytebuffer';
 
 class App extends Component {
   constructor(props) {
@@ -160,6 +161,7 @@ showFilter = ()=>{
     // console.log(this.state.data);
     // console.log(testarray);
     var newresult=[];
+    let newresultt=[];
     var SensorValues = this.state.FirebaseData;
     console.log(this.state);
 //     Object.keys(SensorValues).map((x)=>{
@@ -171,21 +173,39 @@ showFilter = ()=>{
 //   newresult.push(test[y]);
 // })
 // })
-Object.keys(SensorValues).map((x)=>{
-  let test=SensorValues[x];
-  Object.keys(test).map((y)=>{
-    let test2=test[y];
-   // for(let i =0;i<Object.keys(test2).length;i++)newresult.push(test2[i]);
-    Object.keys(test2).map((z)=>{
-      newresult.push(test2[z]);
+// Object.keys(SensorValues).map((x)=>{
+//   let test=SensorValues[x];
+//   Object.keys(test).map((y)=>{
+//     let test2=test[y];
+//     console.log(test2)
+//    // for(let i =0;i<Object.keys(test2).length;i++)newresult.push(test2[i]);
+//     Object.keys(test2).map((z)=>{
+//       newresult.push(test2[z]);
+//     })
+//   })
+// })
+for(let user in SensorValues){
+  for(let record in SensorValues[user]){
+    newresult=[];
+    Object.keys(SensorValues[user][record]).map((x)=>{
+      // Object.keys(SensorValues[user][record][x]).map((i)=>
+      // {newresult.push(SensorValues[user][record][x][i])})
+      newresult.push(SensorValues[user][record][x])
+     
     })
-  })
-})
-if(newresult[0]!=undefined || newresult[0]!=null || newresult[1]!=undefined || newresult[1]!=null){
-console.log(newresult);
+    newresultt = [...newresultt,Object.assign(newresult[0], newresult[1])];
+
+    //newresultt=[...newresultt,newresult]
+  }
+ 
+}
+
+ console.log(newresultt);
+// console.log(newresult[0])
+// newresultt = Object.assign(newresult[0],newresult[1]); 
 console.log(newresult[0])
-let newresultt = Object.assign(newresult[0],newresult[1]); 
-console.log(newresultt); }
+console.log(newresult[1])
+
       
       
 
@@ -242,6 +262,7 @@ console.log(newresultt); }
           <MenuItem value={'longitudeValue'} primaryText="Longitude" />
           <MenuItem value={'pressureValue'} primaryText="Pressure" />
           <MenuItem value={'tags'} primaryText="Tags" />
+          <MenuItem value={'imageLabels'} primaryText="Image Tags" />
         </SelectField>
         </div>
         </div>
@@ -293,13 +314,14 @@ console.log(newresultt); }
             data={//newresult
               orderBy(
                 (this.state.query1 || this.state.query2 || this.state.query3 || this.state.query4 || this.state.query5)
-                  ? newresult.filter(x =>
+                  ? newresultt.filter(x =>
                     {
                       let m=0;
                       let j=0;
                       let columnslength = (Object.keys(this.state.columnsToQuery).length)
                       console.log("COlumns "+columnslength)
                       //Check if Column and Query are Defined
+                      //For Filter Box 1
                  if(this.state.columnToQuery1!=undefined && this.state.columnToQuery1 !="" && this.state.query1!=undefined && this.state.query1 !=""){
                    //Check if include
                    if(this.state.columnsToQuery[("columnToQuery"+1)]=="tags")
@@ -318,6 +340,7 @@ console.log(newresultt); }
                       }
                   }}
                    if(x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)]))return x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)])}
+                   //For FilterBox 2
                  if(this.state.columnToQuery2!=undefined && this.state.columnToQuery2 !="" && this.state.query2!=undefined && this.state.query2 !=""){
                   if(this.state.columnsToQuery[("columnToQuery"+2)]=="tags")
                   {
@@ -335,6 +358,7 @@ console.log(newresultt); }
                      }
                  }}
                   if(x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)]))return x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)])}
+                  //For FilterBox 3
                  if(this.state.columnToQuery3!=undefined && this.state.columnToQuery3 !="" && this.state.query3!=undefined && this.state.query3 !=""){
                   if(this.state.columnsToQuery[("columnToQuery"+3)]=="tags")
                   {
@@ -352,6 +376,7 @@ console.log(newresultt); }
                      }
                  }}
                   if(x[this.state.columnsToQuery[("columnToQuery"+3)]].includes(this.state.queries[("query"+3)]))return x[this.state.columnsToQuery[("columnToQuery"+3)]].includes(this.state.queries[("query"+3)])}
+                  //For FilterBox 4
                  if(this.state.columnToQuery4!=undefined && this.state.columnToQuery4 !="" && this.state.query4!=undefined && this.state.query4 !=""){
                   if(this.state.columnsToQuery[("columnToQuery"+4)]=="tags")
                   {
@@ -369,6 +394,7 @@ console.log(newresultt); }
                      }
                  }}
                   if(x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)]))return x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)])}
+                  //For FilterBox 5
                  if(this.state.columnToQuery5!=undefined && this.state.columnToQuery5 !="" && this.state.query5!=undefined && this.state.query5 !=""){
                   if(this.state.columnsToQuery[("columnToQuery"+5)]=="tags")
                   {
@@ -404,7 +430,7 @@ console.log(newresultt); }
                   }
                     )
                   : 
-           newresult
+           newresultt
              )}
             header={[
               // {
@@ -455,7 +481,12 @@ console.log(newresultt); }
               {
                 name: "Tags",
                 prop: "tags"
-              }
+              },
+              {
+                name: "ImageLabels",
+                prop: "imageLabels"
+              },
+              
 
             ]}
           />
