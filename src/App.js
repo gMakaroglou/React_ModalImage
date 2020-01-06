@@ -19,6 +19,9 @@ import { Divider, Form, Label } from 'semantic-ui-react'
 import './FlexBox.css'
 import FilteringComp from './FIlteringomponent'
 import { concat } from 'bytebuffer';
+import DateTimePick from './DateTimePick'
+import DTP from './DateTimePickkk'
+import Example from './Example'
 
 class App extends Component {
   constructor(props) {
@@ -90,6 +93,10 @@ class App extends Component {
     showquery3:false,
     showquery4:false,
     showquery5:false,
+    dateFrom:'2019-09-18T21:11:57',
+    dateTo:'',
+    timeFrom:'2019-08-18T21:11:54',
+    timeTo:''
   };}
   testfunction = event => {
     alert(event.target.value);
@@ -151,6 +158,21 @@ showFilter = ()=>{
       showquery5: (this.state.numberoffilters+1)>=5 ? true : false
    }));
 }
+changeDateValue = (date) => {
+this.setState((state)=>(
+  {
+  dateFrom: date
+}))
+console.log(this.state.dateFrom)
+}
+changeTimeValue = (time) => {
+  console.log(time);
+  this.setState((state)=>(
+    {
+    timeFrom: time
+  }))
+  console.log("ddadada"+this.state.timeFrom)
+  }
   render() {
     // console.log(this.state.data);
     // console.log(this.state.FirebaseData);
@@ -308,7 +330,9 @@ console.log(newresult[1])
        {this.state.showquery3 ? <FilteringComp hideFilter={this.hideFilter} changeColumn = {this.ChangeFilterColumnStatus} onchange={this.ChangeFilterStatus} FilterNumber="3" columnvalue ={this.state.columnToQuery3 || ''} queryvalue={this.state.query3 || ''}></FilteringComp> : <span></span>}
         {this.state.showquery4 ? <FilteringComp hideFilter={this.hideFilter} changeColumn = {this.ChangeFilterColumnStatus} onchange={this.ChangeFilterStatus} FilterNumber="4" columnvalue ={this.state.columnToQuery4 || ''} queryvalue={this.state.query4 || ''}></FilteringComp> : <span></span>}
         {this.state.showquery5 ?<FilteringComp hideFilter={this.hideFilter} changeColumn = {this.ChangeFilterColumnStatus} onchange={this.ChangeFilterStatus} FilterNumber="5" columnvalue ={this.state.columnToQuery5 || ''} queryvalue={this.state.query5 || ''}></FilteringComp> : <span></span>}
-       
+       {/* <DateTimePick dateFrom={this.dateFrom} dateTo={this.dateTo} timeFrom={this.timeFrom} timeTo={this.timeTo}/> */}
+          
+       <DTP onchange={this.changeDateValue} datevalue={this.state.dateFrom} timevalue={this.state.timeFrom} onTimeChange={this.changeTimeValue}/>
 
         <Table
             data={//newresult
@@ -320,6 +344,15 @@ console.log(newresult[1])
                       let j=0;
                       let columnslength = (Object.keys(this.state.columnsToQuery).length)
                       console.log("COlumns "+columnslength)
+                      console.log("@!#"+this.state.dateFrom)
+                      console.log("@!#"+this.state.timeFrom)
+                      let date1 = new Date(this.state.dateFrom)
+                      let date2 = new Date(this.state.timeFrom)
+                      console.log(date1.getFullYear())
+                      let date3 = new Date(date1.getFullYear(),date1.getMonth(),date1.getDate(),date2.getHours(),date2.getMinutes())
+                      console.log(date1)
+                      console.log(date2)
+                      console.log(date3)
                       //Check if Column and Query are Defined
                       //For Filter Box 1
                  if(this.state.columnToQuery1!=undefined && this.state.columnToQuery1 !="" && this.state.query1!=undefined && this.state.query1 !=""){

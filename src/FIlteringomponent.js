@@ -54,7 +54,7 @@ class FilteringComp extends Component{
           <MenuItem value={'pressureValue'} primaryText="Pressure" />
           <MenuItem value={'tags'} primaryText="Tags" />
         </SelectField>
-        <Fab color="secondary" size="small" aria-label="edit" style={{marginTop: '3%'}}>
+        <Fab color="secondary" size="small" aria-label="edit" style={{marginTop: '2%'}}>
 <DeleteIcon onClick={()=>this.props.hideFilter(this.props.FilterNumber)}/>
 </Fab>
     </div> 

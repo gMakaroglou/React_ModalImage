@@ -11,6 +11,8 @@ import {
     TableRowColumn,
   } from 'material-ui/Table';
   import TRow from './tablerow'
+  import modal from './modalexample'
+  import imageupload from './ImageUpload'
 class TTTable extends React.Component {
   constructor() {
     super();
