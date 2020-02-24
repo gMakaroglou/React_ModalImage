@@ -53,6 +53,10 @@ class FilteringComp extends Component{
           <MenuItem value={'longitudeValue'} primaryText="Longitude" />
           <MenuItem value={'pressureValue'} primaryText="Pressure" />
           <MenuItem value={'tags'} primaryText="Tags" />
+          <MenuItem value={'imageLabels'} primaryText="Image Tags" />
+          <MenuItem value={'city'} primaryText="City" />
+          <MenuItem value={'tempValue'} primaryText="Temperature" />
+          <MenuItem value={'activity'} primaryText="Activity" />
         </SelectField>
         <Fab color="secondary" size="small" aria-label="edit" style={{marginTop: '2%'}}>
 <DeleteIcon onClick={()=>this.props.hideFilter(this.props.FilterNumber)}/>

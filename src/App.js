@@ -22,6 +22,8 @@ import { concat } from 'bytebuffer';
 import DateTimePick from './DateTimePick'
 import DTP from './DateTimePickkk'
 import Example from './Example'
+import Mattable from './newmattable'
+import Gmaps from './Gmaps'
 
 class App extends Component {
   constructor(props) {
@@ -94,9 +96,14 @@ class App extends Component {
     showquery4:false,
     showquery5:false,
     dateFrom:'2019-09-18T21:11:57',
-    dateTo:'',
+    dateTo:'2020-02-18T21:11:57',
     timeFrom:'2019-08-18T21:11:54',
-    timeTo:''
+    timeTo:'2019-08-18T21:11:53',
+    selrows : [],
+    MapLocs : [],
+    Mapsarray : [],
+    NewMapLocs : [],
+    posremove : []
   };}
   testfunction = event => {
     alert(event.target.value);
@@ -165,6 +172,13 @@ this.setState((state)=>(
 }))
 console.log(this.state.dateFrom)
 }
+changeDateValueTo = (date) => {
+  this.setState((state)=>(
+    {
+    dateTo: date
+  }))
+  console.log(this.state.dateTo)
+  }
 changeTimeValue = (time) => {
   console.log(time);
   this.setState((state)=>(
@@ -172,6 +186,66 @@ changeTimeValue = (time) => {
     timeFrom: time
   }))
   console.log("ddadada"+this.state.timeFrom)
+  }
+  changeTimeValueTo = (time) => {
+    console.log(time);
+    this.setState((state)=>(
+      {
+      timeTo: time
+    }))
+    console.log("ddadada"+this.state.timeTo)
+    }
+    updateSelectedRows = rows => {
+      console.log(rows)
+      this.setState(state=> ({
+        selrows:rows
+      }))
+    }
+  viewOnMaps = e => {
+    this.state.Mapsarray = [];
+    let temparr = [];
+    let tempMaps = this.state.MapLocs;
+    this.state.posremove = [];
+   let positionschanged=false
+    console.log(this.state.selrows)
+    console.log(this.state.MapLocs[this.state.selrows])
+    console.log(this.state.Mapsarray)
+   
+    for(let pos in this.state.MapLocs){
+      if(!this.state.MapLocs[pos].eligible){
+        this.state.posremove.push(pos)
+        positionschanged=true;
+      }
+     
+    //  this.state.Mapsarray.push(e[this.state.selrows[marker]])   
+    }
+   
+    console.log(this.state.posremove)
+   let removeValFromIndex = this.state.posremove;  
+
+for (var i = removeValFromIndex.length -1; i >= 0; i--){
+   this.state.MapLocs.splice(removeValFromIndex[i],1);
+}
+console.log(this.state.MapLocs)
+for(let marker in this.state.selrows){
+  console.log(this.state.selrows[marker])
+  temparr.push(this.state.MapLocs[this.state.selrows[marker]])
+//  this.state.Mapsarray.push(e[this.state.selrows[marker]])
+  
+}
+if(!positionschanged)
+  { this.setState(state=>({
+     Mapsarray : temparr,
+     NewMapLocs : this.state.MapLocs
+   }))
+    console.log(this.state.Mapsarray);}
+else{
+  this.setState(state=>({
+    Mapsarray : this.state.MapLocs,
+    NewMapLocs : this.state.MapLocs
+  }))
+   console.log(this.state.Mapsarray);
+}
   }
   render() {
     // console.log(this.state.data);
@@ -215,7 +289,8 @@ for(let user in SensorValues){
       newresult.push(SensorValues[user][record][x])
      
     })
-    newresultt = [...newresultt,Object.assign(newresult[0], newresult[1])];
+    newresult.push(SensorValues[user][record]["test"])
+    newresultt = [...newresultt,Object.assign(newresult[0], newresult[1],newresult[2])];
 
     //newresultt=[...newresultt,newresult]
   }
@@ -225,8 +300,26 @@ for(let user in SensorValues){
  console.log(newresultt);
 // console.log(newresult[0])
 // newresultt = Object.assign(newresult[0],newresult[1]); 
+let twoD = new Array();
+for(let record in newresultt){
+  twoD[record] = new Array();
+  for(let value in newresultt[record]){
+
+    if(value == "latitudeValue"){
+      twoD[record]["latitude"] = newresultt[record][value]
+      twoD[record].eligible=true;
+    }
+    if(value =="longitudeValue"){
+      twoD[record]["longitude"] = newresultt[record][value]
+      twoD[record].eligible=true;
+    }
+    }
+  }
+this.state.MapLocs = twoD
+console.log(twoD)
 console.log(newresult[0])
 console.log(newresult[1])
+console.log(newresult[2])
 
       
       
@@ -240,6 +333,7 @@ console.log(newresult[1])
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        {/* <button onClick={()=>this.viewOnMaps(twoD)}>CLICK ME</button> */}
         {/* <HelloMessage /> */}
         <MuiThemeProvider>
           <div>
@@ -285,6 +379,10 @@ console.log(newresult[1])
           <MenuItem value={'pressureValue'} primaryText="Pressure" />
           <MenuItem value={'tags'} primaryText="Tags" />
           <MenuItem value={'imageLabels'} primaryText="Image Tags" />
+          <MenuItem value={'city'} primaryText="City" />
+          <MenuItem value={'tempValue'} primaryText="Temperature" />
+          <MenuItem value={'activity'} primaryText="Activity" />
+          <MenuItem value={'imageLabelsConfidence'} primaryText="imageLabelsConfidence" />
         </SelectField>
         </div>
         </div>
@@ -322,6 +420,11 @@ console.log(newresult[1])
           <MenuItem value={'longitudeValue'} primaryText="Longitude" />
           <MenuItem value={'pressureValue'} primaryText="Pressure" />
           <MenuItem value={'tags'} primaryText="Tags" />
+          <MenuItem value={'imageLabels'} primaryText="Image Tags" />
+          <MenuItem value={'city'} primaryText="City" />
+          <MenuItem value={'tempValue'} primaryText="Temperature" />
+          <MenuItem value={'activity'} primaryText="Activity" />
+          <MenuItem value={'imageLabelsConfidence'} primaryText="imageLabelsConfidence" />
         </SelectField>
         </div>
 
@@ -332,9 +435,9 @@ console.log(newresult[1])
         {this.state.showquery5 ?<FilteringComp hideFilter={this.hideFilter} changeColumn = {this.ChangeFilterColumnStatus} onchange={this.ChangeFilterStatus} FilterNumber="5" columnvalue ={this.state.columnToQuery5 || ''} queryvalue={this.state.query5 || ''}></FilteringComp> : <span></span>}
        {/* <DateTimePick dateFrom={this.dateFrom} dateTo={this.dateTo} timeFrom={this.timeFrom} timeTo={this.timeTo}/> */}
           
-       <DTP onchange={this.changeDateValue} datevalue={this.state.dateFrom} timevalue={this.state.timeFrom} onTimeChange={this.changeTimeValue}/>
+       <DTP onchange={this.changeDateValue} onchangeTo={this.changeDateValueTo} datevalue={this.state.dateFrom} datevalueTo={this.state.dateTo} timeTo={this.state.timeTo} timevalue={this.state.timeFrom} onTimeChange={this.changeTimeValue} onTimeChangeTo={this.changeTimeValueTo}/>
 
-        <Table
+        {/* <Table
             data={//newresult
               orderBy(
                 (this.state.query1 || this.state.query2 || this.state.query3 || this.state.query4 || this.state.query5)
@@ -344,15 +447,24 @@ console.log(newresult[1])
                       let j=0;
                       let columnslength = (Object.keys(this.state.columnsToQuery).length)
                       console.log("COlumns "+columnslength)
-                      console.log("@!#"+this.state.dateFrom)
-                      console.log("@!#"+this.state.timeFrom)
-                      let date1 = new Date(this.state.dateFrom)
-                      let date2 = new Date(this.state.timeFrom)
-                      console.log(date1.getFullYear())
-                      let date3 = new Date(date1.getFullYear(),date1.getMonth(),date1.getDate(),date2.getHours(),date2.getMinutes())
-                      console.log(date1)
-                      console.log(date2)
+                      console.log("@@@"+this.state.dateFrom)
+                      console.log("@@@"+this.state.timeFrom)
+                      console.log("$$$"+this.state.dateTo)
+                      console.log("$$$"+this.state.timeTo)
+                      let datefrom = new Date(this.state.dateFrom)
+                      let dateto = new Date(this.state.dateTo)
+                      let timeto = new Date(this.state.timeTo)
+                      console.log(datefrom.getFullYear())
+                      let date3 = new Date(datefrom.getFullYear(),datefrom.getMonth(),datefrom.getDate(),timeto.getHours(),timeto.getMinutes())
+                      console.log(datefrom)
+                      console.log(dateto)
                       console.log(date3)
+                      console.log(x["dateOfPhoto"])
+                      let datefromFB= new Date(x["dateOfPhoto"])
+                  if(datefromFB>datefrom || datefromFB<dateto){
+                    console.log("its true!")
+                    return true;
+                  }
                       //Check if Column and Query are Defined
                       //For Filter Box 1
                  if(this.state.columnToQuery1!=undefined && this.state.columnToQuery1 !="" && this.state.query1!=undefined && this.state.query1 !=""){
@@ -522,8 +634,316 @@ console.log(newresult[1])
               
 
             ]}
+          /> */}
+          <Mattable
+           updateRows={this.updateSelectedRows}
+           selectedRows={this.state.selrows}
+            data={//newresult
+              orderBy(
+                (this.state.query1 || this.state.query2 || this.state.query3 || this.state.query4 || this.state.query5)
+                  ? newresultt.filter((x,iter) =>
+                    {
+                      
+                      let m=0;
+                      let j=0;
+                      let columnslength = (Object.keys(this.state.columnsToQuery).length)
+                      console.log("Iteration "+iter)
+                      console.log("@@@"+this.state.dateFrom)
+                      console.log("@@@"+this.state.timeFrom)
+                      console.log("$$$"+this.state.dateTo)
+                      console.log("$$$"+this.state.timeTo)
+                      let cond1,cond2,cond3,cond4,cond5;
+                      let datefrom = new Date(this.state.dateFrom)
+                      let dateto = new Date(this.state.dateTo)
+                      let timeFrom = new Date(this.state.timeFrom)
+                      let timeTo = new Date(this.state.timeTo)
+                      let fulldateto = new Date((dateto.getMonth()+1)+"/"+dateto.getDate()+"/"+dateto.getFullYear()+" "+timeTo.getHours()+":"+timeTo.getMinutes())
+                      let fulldatefrom = new Date((datefrom.getMonth()+1)+"/"+datefrom.getDate()+"/"+datefrom.getFullYear()+" "+timeFrom.getHours()+":"+timeFrom.getMinutes())
+                      console.log(fulldateto)
+                      console.log(fulldatefrom)
+                      console.log(datefrom.getDate()+"/"+datefrom.getMonth()+"/"+datefrom.getFullYear())
+                   //   let date3 = new Date(datefrom.getFullYear(),datefrom.getMonth(),datefrom.getDate(),timeto.getHours(),timeto.getMinutes())
+                      console.log(datefrom)
+                      console.log(dateto)
+                      console.log(dateto.getMonth())
+                    //  console.log(date3)
+                      console.log(x["dateOfPhoto"])
+                      let datecond=false;
+                      let datefromFB= new Date(x["dateOfPhoto"]+" "+x["timeOfPhoto"])
+                      let booldatefrom = datefromFB>fulldatefrom;
+                      let booldateto = datefromFB<fulldateto;
+                      console.log("is date from fb "+datefromFB+" after from "+fulldatefrom + " = "+booldatefrom)
+                      console.log("is date from fb "+datefromFB+" before from "+fulldateto + " = "+booldateto)
+                      // if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                      //   console.log("date true")
+                      //   return true;
+                      // }
+                      // else{
+                      //   console.log("date false")
+                      // }
+                      //Check if Column and Query are Defined
+                      //For Filter Box 1
+                 if(this.state.columnToQuery1!=undefined && this.state.columnToQuery1 !="" && this.state.query1!=undefined && this.state.query1 !="" && x[this.state.columnsToQuery[("columnToQuery"+1)]]!=undefined){
+                   //Check if include
+                   if(this.state.columnsToQuery[("columnToQuery"+1)]=="imageLabels")
+                   {
+                     let tagarray =(this.state.queries[("query"+1)]).split(',');
+                     let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+1)]].split(',');
+                     console.log("TAG array "+tagarray)
+                     console.log("Firebase Tag array "+Firebasetagarray)
+                    
+                     for(m=0;m<Firebasetagarray.length;m++){
+                      if(Firebasetagarray[m]!=""){
+                      for(j=0;j<tagarray.length;j++)
+                      {
+                        console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
+                     if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim())){
+                      if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                        console.log("date true")
+                        //return true; 
+                        cond1=true;
+                      }
+                      else{
+                        console.log("date false")
+                      }
+                     }}}
+                      }
+                  }}
+                   if(x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)]))
+                   {
+                    if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                      console.log("date true")
+                     // return x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)])
+                     cond1=true;
+                    }
+                    else{
+                      console.log("date false")
+                    }
+                  }
+                  }
+                   //For FilterBox 2
+                 if(this.state.columnToQuery2!=undefined && this.state.columnToQuery2 !="" && this.state.query2!=undefined && this.state.query2 !="" && x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabels")
+                  {
+                    let tagarray =(this.state.queries[("query"+2)]).split(',');
+                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
+                    console.log("TAG array "+tagarray)
+                    console.log("Firebase Tag array "+Firebasetagarray)
+                   
+                    for(m=0;m<Firebasetagarray.length;m++){
+                     if(Firebasetagarray[m]!=""){
+                     for(j=0;j<tagarray.length;j++)
+                     {
+                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
+                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                     { if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                      console.log("date true")
+                      //return true;
+                      cond2=true;
+                    }
+                    else{
+                      console.log("date false")
+                    }}
+                    }}
+                     }
+                 }}
+                 if(x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)]))
+                 {
+                  if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                    console.log("date true")
+                    //return x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)])
+                    cond2=true;
+                  }
+                  else{
+                    console.log("date false")
+                  }
+                }}else{cond2=true;}
+                  //For FilterBox 3
+                 if(this.state.columnToQuery3!=undefined && this.state.columnToQuery3 !="" && this.state.query3!=undefined && this.state.query3 !="" && x[this.state.columnsToQuery[("columnToQuery"+3)]]!=undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+3)]=="imageLabels")
+                  {
+                    let tagarray =(this.state.queries[("query"+3)]).split(',');
+                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+3)]].split(',');
+                    console.log("TAG array "+tagarray)
+                    console.log("Firebase Tag array "+Firebasetagarray)
+                   
+                    for(m=0;m<Firebasetagarray.length;m++){
+                     if(Firebasetagarray[m]!=""){
+                     for(j=0;j<tagarray.length;j++)
+                     {
+                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
+                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                      {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                        console.log("date true")
+                      //  return true;
+                      cond3=true;
+                      }
+                      else{
+                        console.log("date false")
+                      }}
+                    }}
+                     }
+                 }}
+                 if(x[this.state.columnsToQuery[("columnToQuery"+3)]].includes(this.state.queries[("query"+3)]))
+                 {
+                  if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                    console.log("date true")
+                   // return x[this.state.columnsToQuery[("columnToQuery"+3)]].includes(this.state.queries[("query"+3)])
+                   cond3=true;
+                  }
+                  else{
+                    console.log("date false")
+                  }
+                }
+                }else{cond3=true;}
+                  //For FilterBox 4
+                 if(this.state.columnToQuery4!=undefined && this.state.columnToQuery4 !="" && this.state.query4!=undefined && this.state.query4 !="" && x[this.state.columnsToQuery[("columnToQuery"+5)]]!=undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+4)]=="imageLabels")
+                  {
+                    let tagarray =(this.state.queries[("query"+4)]).split(',');
+                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+4)]].split(',');
+                    console.log("TAG array "+tagarray)
+                    console.log("Firebase Tag array "+Firebasetagarray)
+                   
+                    for(m=0;m<Firebasetagarray.length;m++){
+                     if(Firebasetagarray[m]!=""){
+                     for(j=0;j<tagarray.length;j++)
+                     {
+                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
+                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                      {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                        console.log("date true")
+                       // return true;
+                       cond4=true;
+                      }
+                      else{
+                        console.log("date false")
+                      }}
+                    }}
+                     }
+                 }}
+                 if(x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)]))
+                 {
+                  if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                    console.log("date true")
+                   // return x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)])
+                   cond4=true;
+                  }
+                  else{
+                    console.log("date false")
+                  }
+                }
+                }else{cond4=true;}
+                  //For FilterBox 5
+                 if(this.state.columnToQuery5!=undefined && this.state.columnToQuery5 !="" && this.state.query5!=undefined && this.state.query5 !="" && x[this.state.columnsToQuery[("columnToQuery"+5)]]!=undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+5)]=="imageLabels")
+                  {
+                    let tagarray =(this.state.queries[("query"+5)]).split(',');
+                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+5)]].split(',');
+                    console.log("TAG array "+tagarray)
+                    console.log("Firebase Tag array "+Firebasetagarray)
+                    let i =0;
+                    for(m=0;m<Firebasetagarray.length;m++){
+                     if(Firebasetagarray[m]!=""){
+                     for(j=0;j<tagarray.length;j++)
+                     {
+                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
+                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                      {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                        console.log("date true")
+                       // return true;
+                       cond5=true;
+                      }
+                      else{
+                        console.log("date false")
+                      }}
+                    }}
+                     }
+                 }}
+                 if(x[this.state.columnsToQuery[("columnToQuery"+5)]].includes(this.state.queries[("query"+5)]))
+                 {
+                  if(datefromFB>fulldatefrom && datefromFB<fulldateto){
+                    console.log("date true")
+                   // return x[this.state.columnsToQuery[("columnToQuery"+5)]].includes(this.state.queries[("query"+5)])
+                   cond5=true;
+                  }
+                  else{
+                    console.log("date false")
+                  }
+                }
+                }else{cond5=true;}                     
+                  if(cond1 && cond2 &&cond3 && cond4 &cond5){
+                    this.state.MapLocs[iter].eligible=true;
+                    console.log(this.state.MapLocs)
+                    // console.log(this.state.posremove)
+                    return true;
+                  }
+                  else{
+                    this.state.MapLocs[iter].eligible=false;
+                    // this.state.posremove.push(iter);
+                  }
+                  }
+                    )
+                  : 
+           newresultt
+             )}
+            header={[
+
+
+              {
+                name: "User",
+                prop: "user"
+              },
+              {
+                name: "ambTempValue",
+                prop: "ambTempValue"
+              },
+              {
+                name: "latitudeValue",
+                prop: "latitudeValue"
+              },
+              {
+                name: "lightValue",
+                prop: "lightValue"
+              },
+              {
+                name: "longitudeValue",
+                prop: "longitudeValue"
+              },
+              {
+                name: "pressureValue",
+                prop: "pressureValue"
+              },
+              {
+                name: "Tags",
+                prop: "tags"
+              },
+              {
+                name: "ImageLabels",
+                prop: "imageLabels"
+              },
+              {
+                name: "Day Of Photo",
+                prop: "dateOfPhoto"
+              },
+              {
+                name: "City",
+                prop: "city"
+              },
+              {
+                name: "Temperature",
+                prop: "tempValue"
+              },
+              {
+                name: "Activity",
+                prop: "activity"
+              },
+              
+
+            ]}
           />
       </MuiThemeProvider>
+      <Gmaps markers ={this.state.Mapsarray} showonmap={()=>this.viewOnMaps(this.state.NewMapLocs)}/>
       </div>
     );
   }

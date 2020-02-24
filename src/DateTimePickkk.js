@@ -19,12 +19,20 @@ class MaterialUIPickers extends Component{
 //   };
 state = { 
   dateFrom :'',
-  timeFrom: '2014-08-18T21:11:54'
+  timeFrom: '2014-08-18T21:11:54',
+  dateTo :'',
+  timeTo: '2014-08-18T21:11:56'
  }
- handleDateChange = date => {
+//  handleDateChangeFrom = date => {
+//   this.setState((state)=>(
+//     {
+//     timeFrom: date
+//   })) 
+//  }
+ handleDateChangeTo = date => {
   this.setState((state)=>(
     {
-    timeFrom: date
+    timeTo: date
   })) 
  }
 render(){
@@ -81,7 +89,7 @@ render(){
           format="MM/dd/yyyy"
           margin="normal"
           id="date-picker-inline"
-          label="Date picker inline"
+          label="Date From"
           value={this.props.datevalue}
           onChange={(e,date)=>{
 
@@ -95,7 +103,7 @@ render(){
         style={{marginLeft:'10px'}}
           margin="normal"
           id="time-picker"
-          label="Time picker"
+          label="Time From"
           value={this.props.timevalue}
           onChange={(e,date)=>{
             console.log(e);
@@ -127,14 +135,37 @@ render(){
           }}
         /></Col>
         */}
-        <Row>
+        <Row style={{marginLeft:'2px'}}>To:</Row>
+      <Row xs="4" style={{marginLeft:'1px'}}>
+        <Col style={{marginLeft:'10px'}}><KeyboardDatePicker
+         style={{marginLeft:'1%'}}
+          disableToolbar
+          variant="inline"
+          format="MM/dd/yyyy"
+          margin="normal"
+          id="date-picker-inline"
+          label="Date To"
+          value={this.props.datevalueTo}
+          onChange={(e,date)=>{
+            console.log(e);
+            console.log(date)
+             this.props.onchangeTo(date);
+           }}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        /></Col>
         <Col><KeyboardTimePicker
         style={{marginLeft:'10px'}}
           margin="normal"
-          id="time-picker"
-          label="Time picker"
-          value={this.state.timeFrom}
-          onChange={this.handleDateChange}
+          id="time-picker2"
+          label="Time To"
+          value={this.props.timeTo}
+          onChange={(e,date)=>{
+            console.log(e);
+            console.log(date)
+            this.props.onTimeChangeTo(e);
+          }}
           KeyboardButtonProps={{
             'aria-label': 'change time',
           }}
