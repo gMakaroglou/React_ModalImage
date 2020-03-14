@@ -402,8 +402,9 @@ console.log(newresult[2])
     /></div>
     <div>
         <SelectField
-          floatingLabelText="Search By"
+          floatingLabelText="Confidence"
           value={this.state.columnToQuery2}
+          inputProps={{ min: "0.0", max: "1.0", step: "0.01" }}
           onChange={(event,index,value) =>
             { 
               let currentcolumns = {...this.state.columnsToQuery}
@@ -414,7 +415,7 @@ console.log(newresult[2])
             // columnsToQuery : [...this.state.columnsToQuery,value]})
           }}
         >
-          <MenuItem value={'ambTempValue'} primaryText="Ambient Temperature" />
+          {/* <MenuItem value={'ambTempValue'} primaryText="Ambient Temperature" />
           <MenuItem value={'latitudeValue'} primaryText="Latitude" />
           <MenuItem value={'lightValue'} primaryText="lightValue" />
           <MenuItem value={'longitudeValue'} primaryText="Longitude" />
@@ -423,7 +424,7 @@ console.log(newresult[2])
           <MenuItem value={'imageLabels'} primaryText="Image Tags" />
           <MenuItem value={'city'} primaryText="City" />
           <MenuItem value={'tempValue'} primaryText="Temperature" />
-          <MenuItem value={'activity'} primaryText="Activity" />
+          <MenuItem value={'activity'} primaryText="Activity" /> */}
           <MenuItem value={'imageLabelsConfidence'} primaryText="imageLabelsConfidence" />
         </SelectField>
         </div>
@@ -683,6 +684,11 @@ console.log(newresult[2])
                       // }
                       //Check if Column and Query are Defined
                       //For Filter Box 1
+                      cond1=false;
+                      cond2=false;
+                      cond3=false;
+                      cond4=false;
+                      cond5=false;
                  if(this.state.columnToQuery1!=undefined && this.state.columnToQuery1 !="" && this.state.query1!=undefined && this.state.query1 !="" && x[this.state.columnsToQuery[("columnToQuery"+1)]]!=undefined){
                    //Check if include
                    if(this.state.columnsToQuery[("columnToQuery"+1)]=="imageLabels")
@@ -701,15 +707,28 @@ console.log(newresult[2])
                       if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                         //return true; 
-                        cond1=true;
+                       // cond1=true;
+                        if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                      {
+                        console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
+                        let confidencevalue = parseFloat(this.state.queries[("query"+2)])
+                        if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                        {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
+                        console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
+                         if(Firebaseconfarray[m]>confidencevalue)
+                         {cond1=true;
+                         console.log("passed conftest")}
+                         
+
+                      }else{cond1=true;}}
                       }
                       else{
                         console.log("date false")
                       }
                      }}}
                       }
-                  }}
-                   if(x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)]))
+                  }}             
+                  else if(x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)]))
                    {
                     if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                       console.log("date true")
@@ -739,7 +758,8 @@ console.log(newresult[2])
                      { if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                       console.log("date true")
                       //return true;
-                      cond2=true;
+                     cond2=true;
+                      
                     }
                     else{
                       console.log("date false")
@@ -747,12 +767,14 @@ console.log(newresult[2])
                     }}
                      }
                  }}
+                
                  if(x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)]))
                  {
                   if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                     console.log("date true")
                     //return x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)])
                     cond2=true;
+                    
                   }
                   else{
                     console.log("date false")
@@ -776,7 +798,20 @@ console.log(newresult[2])
                       {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                       //  return true;
-                      cond3=true;
+                     // cond3=true;
+                      if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                      {
+                        console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
+                        let confidencevalue = parseFloat(this.state.queries[("query"+2)])
+                        if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                        {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
+                        console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
+                         if(Firebaseconfarray[m]>confidencevalue)
+                         {cond3=true;
+                         console.log("passed conftest")}
+                         
+
+                      }else{cond3=true;}}
                       }
                       else{
                         console.log("date false")
@@ -797,7 +832,7 @@ console.log(newresult[2])
                 }
                 }else{cond3=true;}
                   //For FilterBox 4
-                 if(this.state.columnToQuery4!=undefined && this.state.columnToQuery4 !="" && this.state.query4!=undefined && this.state.query4 !="" && x[this.state.columnsToQuery[("columnToQuery"+5)]]!=undefined){
+                 if(this.state.columnToQuery4!=undefined && this.state.columnToQuery4 !="" && this.state.query4!=undefined && this.state.query4 !="" && x[this.state.columnsToQuery[("columnToQuery"+4)]]!=undefined){
                   if(this.state.columnsToQuery[("columnToQuery"+4)]=="imageLabels")
                   {
                     let tagarray =(this.state.queries[("query"+4)]).split(',');
@@ -814,7 +849,20 @@ console.log(newresult[2])
                       {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                        // return true;
-                       cond4=true;
+                       //cond4=true;
+                       if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                       {
+                         console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
+                         let confidencevalue = parseFloat(this.state.queries[("query"+2)])
+                         if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                         {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
+                         console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
+                          if(Firebaseconfarray[m]>confidencevalue)
+                          {cond4=true;
+                          console.log("passed conftest")}
+                          
+ 
+                       }else{cond4=true;}}
                       }
                       else{
                         console.log("date false")
@@ -824,6 +872,8 @@ console.log(newresult[2])
                  }}
                  if(x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)]))
                  {
+                   console.log(this.state.columnsToQuery[("columnToQuery"+4)])
+                   console.log(this.state.queries[("query"+4)])
                   if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                     console.log("date true")
                    // return x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)])
@@ -833,7 +883,9 @@ console.log(newresult[2])
                     console.log("date false")
                   }
                 }
-                }else{cond4=true;}
+                }else{
+                  console.log("cond 4 undefined")
+                  cond4=true;}
                   //For FilterBox 5
                  if(this.state.columnToQuery5!=undefined && this.state.columnToQuery5 !="" && this.state.query5!=undefined && this.state.query5 !="" && x[this.state.columnsToQuery[("columnToQuery"+5)]]!=undefined){
                   if(this.state.columnsToQuery[("columnToQuery"+5)]=="imageLabels")
@@ -852,7 +904,20 @@ console.log(newresult[2])
                       {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                        // return true;
-                       cond5=true;
+                       //cond5=true;
+                       if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                       {
+                         console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
+                         let confidencevalue = parseFloat(this.state.queries[("query"+2)])
+                         if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                         {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
+                         console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
+                          if(Firebaseconfarray[m]>confidencevalue)
+                          {cond5=true;
+                          console.log("passed conftest")}
+                          
+ 
+                       }else{cond5=true;}}
                       }
                       else{
                         console.log("date false")
@@ -875,6 +940,7 @@ console.log(newresult[2])
                   if(cond1 && cond2 &&cond3 && cond4 &cond5){
                     this.state.MapLocs[iter].eligible=true;
                     console.log(this.state.MapLocs)
+                    
                     // console.log(this.state.posremove)
                     return true;
                   }
@@ -938,6 +1004,10 @@ console.log(newresult[2])
                 name: "Activity",
                 prop: "activity"
               },
+              {
+                name: "LabelsConfidence",
+                prop: "imageLabelsConfidence"
+              }
               
 
             ]}

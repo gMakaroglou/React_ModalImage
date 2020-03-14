@@ -23,11 +23,7 @@ class FilteringComp extends Component{
         value={this.props.queryvalue}
         name={"query"+this.props.FilterNumber}
         onChange={e=>{
-        //   let currentqueries = {...this.props.queries}
-        //   currentqueries[e.target.name] = e.target.value
-        //   console.log("Current Queries" + currentqueries)
-        //   this.setState({ queries: currentqueries ,query2:e.target.value}
-         //this.setState({ queries: [...this.state.queries,e.target.value] ,query1:e.target.value}
+
          this.props.onchange(e);
        }}
       hintText="Search Value"
@@ -37,14 +33,10 @@ class FilteringComp extends Component{
           value={this.props.columnvalue}
           onChange={(event,index,value) =>
             { 
-            //   let currentcolumns = {...this.props.columnsToQuery}
-            //   console.log()
-            //   currentcolumns[("columnToQuery3")] = value
-            //   this.setState({ columnsToQuery: currentcolumns ,columnToQuery3:value})
+
             console.log("THIIIIIIS PROPPPPPS FILTERNUMBER"+this.props.FilterNumber)
             this.props.changeColumn(event,index,value,this.props.FilterNumber);
-            //   this.setState({columnToQuery1 : value,
-            // columnsToQuery : [...this.state.columnsToQuery,value]})
+
           }}
         >
           <MenuItem value={'ambTempValue'} primaryText="Ambient Temperature" />
@@ -58,6 +50,17 @@ class FilteringComp extends Component{
           <MenuItem value={'tempValue'} primaryText="Temperature" />
           <MenuItem value={'activity'} primaryText="Activity" />
         </SelectField>
+       {/* { this.props.name.includes("Confidence") ?<div>
+           
+        <TextField style={{marginTop: '12%'  }}
+        value={this.props.confidencevalue}
+        name={"query"+this.props.confidenceNumber}
+        onChange={e=>{
+
+         this.props.onchange(e);
+       }}
+      hintText="Search Confidence"
+    /></div> : null} */}
         <Fab color="secondary" size="small" aria-label="edit" style={{marginTop: '2%'}}>
 <DeleteIcon onClick={()=>this.props.hideFilter(this.props.FilterNumber)}/>
 </Fab>
