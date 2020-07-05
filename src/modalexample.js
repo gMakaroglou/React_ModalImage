@@ -14,7 +14,7 @@ export default class ModalExampleControlled extends Component {
 
     return (
       <Modal
-        trigger={<Button className={styles.buttonstyle} onClick={this.handleOpen}>View Image</Button>}
+        trigger={<Button onClick={this.handleOpen}>View Image</Button>}
         open={this.state.modalOpen}
         onClose={this.handleClose}
         basic

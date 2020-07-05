@@ -19,7 +19,7 @@ class TestTable extends React.Component {
                       wordWrap: "break-word"
                     }}>
      <ShowPhoto user={x["user"]} image={x["imageId"]}/>
-     {console.log("Image "+x["imageId"])}
+     {/* {console.log("Image "+x["imageId"])} */}
       </TableRowColumn>
     {header.map((y, k) =>
     
@@ -34,7 +34,7 @@ class TestTable extends React.Component {
     <Table
     multiSelectable={true}
     onRowSelection={selectionRows=>{
-        console.log("onRowSelection" + selectionRows,this.props.updateRows(selectionRows))
+        // console.log("onRowSelection" + selectionRows,this.props.updateRows(selectionRows))
     }} >
     <TableHeader >
       <TableRow>

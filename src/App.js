@@ -29,7 +29,11 @@ class App extends Component {
   this.state = {
 
     SensorValues:[],
+
+    //State Variable for Firebase Data
     FirebaseData:[],
+
+    //User Input for Filtering
     query1:'',
     query2:'',
     query3:'',
@@ -37,6 +41,8 @@ class App extends Component {
     query5:'',
     query6:'',
     queries:[],
+
+    //Number Of Columns for Filtering
     columnToQuery1:'',
     columnToQuery2:'',
     columnToQuery3:'',
@@ -48,6 +54,8 @@ class App extends Component {
     showquery3:false,
     showquery4:false,
     showquery5:false,
+
+    //Initialized Timestamps
     dateFrom:'2019-09-18T21:11:57',
     dateTo:'2020-02-18T21:11:57',
     timeFrom:'2019-08-18T21:11:54',
@@ -59,41 +67,28 @@ class App extends Component {
     posremove : [],
     loaded : false,
   };}
-  testfunction = event => {
-    alert(event.target.value);
-  };
-  componentDidMount() {
-    if(!this.state.loaded)
-    {
-      this.getUserData();
 
-      console.log(this.state.loaded);
-    }
+  componentDidMount() {
+      this.getUserData();
   }
   componentDidUpdate(){
 
   }
 
-
-  // divstyle = () => {
-  //   marginTop  : ' 10px'
-  // }
+  //Get Data From Firebase
   getUserData = () => {
-    if(!this.state.loaded)
-    { 
+
     let ref = Firebase.database().ref("/SensorFoo/");
     ref.on("value", snapshot => {
       const state = snapshot.val();
-      console.log(this.state.loaded)
-
-        this.setState({loaded : true}); 
-        console.log(this.state.loaded);
         this.setState({FirebaseData : state});
       
 
 
     });
-  }};
+  };
+
+  //User Input Change
  ChangeFilterStatus = (e) => {
   let currentqueries = {...this.state.queries}
   let queryname = e.target.name
@@ -102,6 +97,8 @@ class App extends Component {
   console.log("e target name"+e.target.name)
   this.setState({ queries: currentqueries ,[queryname]:e.target.value})
  }
+
+ //Filter Type Change
  ChangeFilterColumnStatus = (event,index,value,FilterNumber) =>
  { 
 
@@ -112,6 +109,8 @@ class App extends Component {
   //   this.setState({columnToQuery1 : value,
   // columnsToQuery : [...this.state.columnsToQuery,value]})
 }
+
+//Hide Extra Filters
 hideFilter = (queryToHide) => {
 let query = "showquery"+queryToHide;
 this.setState((state) => (  // this is the current state
@@ -122,6 +121,8 @@ this.setState((state) => (  // this is the current state
  }));
  console.log(this.state.numberoffilters);
 }
+
+//Display 3rd,4th or 5th filtering
 showFilter = ()=>{
   
   this.setState((state) => (  // this is the current state
@@ -132,6 +133,8 @@ showFilter = ()=>{
       showquery5: (this.state.numberoffilters+1)>=5 ? true : false
    }));
 }
+
+//Change Date Value From
 changeDateValue = (date) => {
 this.setState((state)=>(
   {
@@ -139,28 +142,29 @@ this.setState((state)=>(
 }))
 console.log(this.state.dateFrom)
 }
+//Change Date Value To
 changeDateValueTo = (date) => {
   this.setState((state)=>(
     {
     dateTo: date
   }))
-  console.log(this.state.dateTo)
   }
+
+  //Change Time Value From
 changeTimeValue = (time) => {
-  console.log(time);
+
   this.setState((state)=>(
     {
     timeFrom: time
   }))
-  console.log("ddadada"+this.state.timeFrom)
   }
+  //Change Time Value To
   changeTimeValueTo = (time) => {
     console.log(time);
     this.setState((state)=>(
       {
       timeTo: time
     }))
-    console.log("ddadada"+this.state.timeTo)
     }
     updateSelectedRows = rows => {
       console.log(rows)
@@ -168,6 +172,7 @@ changeTimeValue = (time) => {
         selrows:rows
       }))
     }
+    //View Rows on Google Maps
   viewOnMaps = e => {
     this.state.Mapsarray = [];
     let temparr = [];
@@ -215,88 +220,49 @@ else{
 }
   }
   render() {
-    // console.log(this.state.data);
-    // console.log(this.state.FirebaseData);
-    // var testarray=[];
-    // Object.keys(this.state.FirebaseData).map((element)=>{
-    //   testarray.push(this.state.FirebaseData[element]);
-    // })
-    // console.log(this.state.data);
-    // console.log(testarray);
-    var newresult=[];
-    let newresultt=[];
+
+    var SensorValuestmp=[];
+    let SensorValuesFinal=[];
     var SensorValues = this.state.FirebaseData;
     console.log(this.state);
-//     Object.keys(SensorValues).map((x)=>{
-//       // console.log(x),
-//      // console.log(data),
-//         let test=SensorValues[x]
-// Object.keys(test).map((y)=>{
-//   test[y].imageid=y;
-//   newresult.push(test[y]);
-// })
-// })
-// Object.keys(SensorValues).map((x)=>{
-//   let test=SensorValues[x];
-//   Object.keys(test).map((y)=>{
-//     let test2=test[y];
-//     console.log(test2)
-//    // for(let i =0;i<Object.keys(test2).length;i++)newresult.push(test2[i]);
-//     Object.keys(test2).map((z)=>{
-//       newresult.push(test2[z]);
-//     })
-//   })
-// })
+
 for(let user in SensorValues){
   for(let record in SensorValues[user]){
-    newresult=[];
+    SensorValuestmp=[];
     Object.keys(SensorValues[user][record]).map((x)=>{
-      // Object.keys(SensorValues[user][record][x]).map((i)=>
-      // {newresult.push(SensorValues[user][record][x][i])})
-      newresult.push(SensorValues[user][record][x])
+      SensorValuestmp.push(SensorValues[user][record][x])
      
     })
-    newresult.push(SensorValues[user][record]["test"])
-    newresultt = [...newresultt,Object.assign(newresult[0], newresult[1],newresult[2])];
+    SensorValuestmp.push(SensorValues[user][record]["test"])
+    SensorValuesFinal = [...SensorValuesFinal,Object.assign(SensorValuestmp[0], SensorValuestmp[1],SensorValuestmp[2])];
 
-    //newresultt=[...newresultt,newresult]
   }
  
 }
 
- console.log(newresultt);
-// console.log(newresult[0])
-// newresultt = Object.assign(newresult[0],newresult[1]); 
-let twoD = new Array();
-for(let record in newresultt){
-  twoD[record] = new Array();
-  for(let value in newresultt[record]){
+//Convert Location Data in 2D array
+let DataArrayForMaps = new Array();
+for(let record in SensorValuesFinal){
+  DataArrayForMaps[record] = new Array();
+  for(let value in SensorValuesFinal[record]){
 
     if(value === "latitudeValue"){
-      twoD[record]["latitude"] = newresultt[record][value]
-      twoD[record].eligible=true;
+      DataArrayForMaps[record]["latitude"] = SensorValuesFinal[record][value]
+      DataArrayForMaps[record].eligible=true;
     }
     if(value ==="longitudeValue"){
-      twoD[record]["longitude"] = newresultt[record][value]
-      twoD[record].eligible=true;
+      DataArrayForMaps[record]["longitude"] = SensorValuesFinal[record][value]
+      DataArrayForMaps[record].eligible=true;
     }
     }
   }
-this.state.MapLocs = twoD
-console.log(twoD)
-console.log(newresult[0])
-console.log(newresult[1])
-console.log(newresult[2])
-
-      
-      
-
+this.state.MapLocs = DataArrayForMaps
     return (
       <div className="App">
         <div className="App-header">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <img src={papeilogo} className={styles.papeilogo} />
-          <h2>Welcome to React</h2>
+          {/* <h2>Welcome to React</h2> */}
         </div>
         <p className="App-intro">
           {/* To get started, edit <code>src/App.js</code> and save to reload. */}
@@ -342,7 +308,7 @@ console.log(newresult[2])
           <MenuItem value={'longitudeValue'} primaryText="Longitude" />
           <MenuItem value={'pressureValue'} primaryText="Pressure" />
           <MenuItem value={'tags'} primaryText="Tags" />
-          <MenuItem value={'imageLabels'} primaryText="Image Tags" />
+          <MenuItem value={'imageLabels'} primaryText="Image Labels" />
           <MenuItem value={'city'} primaryText="City" />
           <MenuItem value={'tempValue'} primaryText="Temperature" />
           <MenuItem value={'activity'} primaryText="Activity" />
@@ -398,17 +364,12 @@ console.log(newresult[2])
             data={//newresult
               orderBy(
                 (this.state.query1 || this.state.query2 || this.state.query3 || this.state.query4 || this.state.query5)
-                  ? newresultt.filter((x,iter) =>
+                  ? SensorValuesFinal.filter((x,iter) =>
                     {
                       
                       let m=0;
                       let j=0;
                       let columnslength = (Object.keys(this.state.columnsToQuery).length)
-                      console.log("Iteration "+iter)
-                      console.log("@@@"+this.state.dateFrom)
-                      console.log("@@@"+this.state.timeFrom)
-                      console.log("$$$"+this.state.dateTo)
-                      console.log("$$$"+this.state.timeTo)
                       let cond1,cond2,cond3,cond4,cond5;
                       let datefrom = new Date(this.state.dateFrom)
                       let dateto = new Date(this.state.dateTo)
@@ -416,30 +377,13 @@ console.log(newresult[2])
                       let timeTo = new Date(this.state.timeTo)
                       let fulldateto = new Date((dateto.getMonth()+1)+"/"+dateto.getDate()+"/"+dateto.getFullYear()+" "+timeTo.getHours()+":"+timeTo.getMinutes())
                       let fulldatefrom = new Date((datefrom.getMonth()+1)+"/"+datefrom.getDate()+"/"+datefrom.getFullYear()+" "+timeFrom.getHours()+":"+timeFrom.getMinutes())
-                      console.log(fulldateto)
-                      console.log(fulldatefrom)
-                      console.log(datefrom.getDate()+"/"+datefrom.getMonth()+"/"+datefrom.getFullYear())
-                   //   let date3 = new Date(datefrom.getFullYear(),datefrom.getMonth(),datefrom.getDate(),timeto.getHours(),timeto.getMinutes())
-                      console.log(datefrom)
-                      console.log(dateto)
-                      console.log(dateto.getMonth())
-                    //  console.log(date3)
-                      console.log(x["dateOfPhoto"])
+
                       let datecond=false;
                       let datefromFB= new Date(x["dateOfPhoto"]+" "+x["timeOfPhoto"])
                       let booldatefrom = datefromFB>fulldatefrom;
                       let booldateto = datefromFB<fulldateto;
-                      console.log("is date from fb "+datefromFB+" after from "+fulldatefrom + " = "+booldatefrom)
-                      console.log("is date from fb "+datefromFB+" before from "+fulldateto + " = "+booldateto)
-                      // if(datefromFB>fulldatefrom && datefromFB<fulldateto){
-                      //   console.log("date true")
-                      //   return true;
-                      // }
-                      // else{
-                      //   console.log("date false")
-                      // }
-                      //Check if Column and Query are 
-                      //For Filter Box 1
+
+
                       cond1=false;
                       cond2=false;
                       cond3=false;
@@ -476,7 +420,9 @@ console.log(newresult[2])
                          console.log("passed conftest")}
                          
 
-                      }else{cond1=true;}}
+                      }else{cond1=true;
+                        console.log("passed conftest")}
+                      }
                       }
                       else{
                         console.log("date false")
@@ -515,6 +461,7 @@ console.log(newresult[2])
                       console.log("date true")
                       //return true;
                      cond2=true;
+                     console.log("passed conftest2")
                       
                     }
                     else{
@@ -530,6 +477,7 @@ console.log(newresult[2])
                     console.log("date true")
                     //return x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)])
                     cond2=true;
+                    console.log("passed conftest2")
                     
                   }
                   else{
@@ -564,10 +512,12 @@ console.log(newresult[2])
                         console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
                          if(Firebaseconfarray[m]>confidencevalue)
                          {cond3=true;
+                          console.log("passed conftest3")
                          console.log("passed conftest")}
                          
 
-                      }else{cond3=true;}}
+                      }else{cond3=true;
+                        console.log("passed conftest3")}}
                       }
                       else{
                         console.log("date false")
@@ -604,21 +554,23 @@ console.log(newresult[2])
                     if(tagarray[j]!==""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
                       {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
-                       // return true;
-                       //cond4=true;
-                       if(this.state.columnsToQuery[("columnToQuery"+2)]==="imageLabelsConfidence")
-                       {
-                         console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
-                         let confidencevalue = parseFloat(this.state.queries[("query"+2)])
-                         if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!==undefined)
-                         {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
-                         console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
-                          if(Firebaseconfarray[m]>confidencevalue)
-                          {cond4=true;
-                          console.log("passed conftest")}
-                          
- 
-                       }else{cond4=true;}}
+                      //  return true;
+                     // cond3=true;
+                      if(this.state.columnsToQuery[("columnToQuery"+2)]==="imageLabelsConfidence")
+                      {
+                        console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
+                        let confidencevalue = parseFloat(this.state.queries[("query"+2)])
+                        if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!==undefined)
+                        {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
+                        console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
+                         if(Firebaseconfarray[m]>confidencevalue)
+                         {cond4=true;
+                          console.log("passed conftest4")
+                         console.log("passed conftest")}
+                         
+
+                      }else{cond3=true;
+                        console.log("passed conftest4")}}
                       }
                       else{
                         console.log("date false")
@@ -628,20 +580,16 @@ console.log(newresult[2])
                  }}
                  if(x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)]))
                  {
-                   console.log(this.state.columnsToQuery[("columnToQuery"+4)])
-                   console.log(this.state.queries[("query"+4)])
                   if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                     console.log("date true")
                    // return x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)])
-                   cond4=true;
+                   cond3=true;
                   }
                   else{
                     console.log("date false")
                   }
                 }
-                }else{
-                  console.log("cond 4 undefined")
-                  cond4=true;}
+                }else{cond4=true;}
                   //For FilterBox 5
                  if(this.state.columnToQuery5!==undefined && this.state.columnToQuery5 !=="" && this.state.query5!==undefined && this.state.query5 !=="" && x[this.state.columnsToQuery[("columnToQuery"+5)]]!==undefined){
                   if(this.state.columnsToQuery[("columnToQuery"+5)]==="imageLabels")
@@ -673,7 +621,8 @@ console.log(newresult[2])
                           console.log("passed conftest")}
                           
  
-                       }else{cond5=true;}}
+                       }else{cond5=true;
+                        console.log("passed conftest5")}}
                       }
                       else{
                         console.log("date false")
@@ -687,6 +636,7 @@ console.log(newresult[2])
                     console.log("date true")
                    // return x[this.state.columnsToQuery[("columnToQuery"+5)]].includes(this.state.queries[("query"+5)])
                    cond5=true;
+                   console.log("passed conftest5")
                   }
                   else{
                     console.log("date false")
@@ -695,7 +645,7 @@ console.log(newresult[2])
                 }else{cond5=true;}                     
                   if(cond1 && cond2 &&cond3 && cond4 &cond5){
                     this.state.MapLocs[iter].eligible=true;
-                    console.log(this.state.MapLocs)
+                    // console.log(this.state.MapLocs)
                     
                     // console.log(this.state.posremove)
                     return true;
@@ -707,7 +657,7 @@ console.log(newresult[2])
                   }
                     )
                   : 
-           newresultt
+           SensorValuesFinal
              )}
             header={[
 
