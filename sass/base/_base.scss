@@ -1,0 +1,38 @@
+
+*,
+*::before,
+*::after {
+    margin:0;
+    padding:0;
+    box-sizing:inherit;
+}
+
+html {
+    box-sizing:border-box;
+    font-size: 62.5%;
+}
+
+body {
+    // font-family: $font-primary;
+    // color:$color-grey-dark-2;
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+.container {
+    display:grid;
+    grid-template-rows:12vh 88vh min-content min-content;
+    // 1140 pixels /  8 columns ==> 142.5 ==> 140 pixels ==> 14rem
+    grid-template-columns: [sidebar-start] auto [sidebar-end full-start] 
+    minmax(6rem, 1fr) [center-start] repeat(8, [col-start] 
+    minmax(min-content, 20rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
+
+    // grid-template-columns: 8rem minmax(6rem,1fr) repeat(8, minmax(min-content, 14rem)) minmax(6rem,1fr);
+    //minmax(min-content,14rem) ==> άμα έχεις 14 rem χρησιμοποιήσε τα ,
+    //αλλιώς φρόντισε να χωράει το περιεχόμενο.
+
+    & > * {
+        // padding: 40px;
+       // font-size: 3rem;
+    }
+}

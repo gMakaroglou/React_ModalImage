@@ -1,0 +1,80 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; }
+
+body {
+  font-weight: 700;
+  line-height: 1.6; }
+
+.container {
+  display: grid;
+  grid-template-rows: 12vh 88vh min-content min-content;
+  grid-template-columns: [sidebar-start] auto [sidebar-end full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 20rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end]; }
+
+.data {
+  grid-column: full-start/full-end; }
+
+.buttonstyle {
+  /* margin-top:30px;
+  margin-bottom:30px;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  width:100px;
+  height:40px;
+  color: #000; */
+  /* width: 140px ; */
+  height: 45px !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2.5px !important;
+  font-weight: 500 !important;
+  color: #000 !important;
+  background-color: #fff !important;
+  border: none !important;
+  border-radius: 45px !important;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease 0s !important;
+  cursor: pointer !important;
+  outline: none !important;
+  margin-top:30px !important;
+  margin-bottom:30px !important;
+}
+
+.buttonstyle:hover {
+  background-color: #2EE59D !important;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4) !important;
+  color: #fff !important;
+  transform: translateY(-7px) !important;
+}
+
+.papeilogo {
+  height:100px;
+}
+.papeilogo::after{
+  /* bottom: 0.5rem;
+    content: '';
+    display: block;
+    height: 1px;
+    position: absolute;
+    right: 0;
+    width: calc(100%);
+    left: 0;
+    background: red; */
+    bottom:-3.5rem; 
+    content:"";
+    display:block;
+    height:1px;
+    position:absolute;
+    right:0;
+    width:calc(200% + 7rem);
+    left:0;
+    background:red;
+}

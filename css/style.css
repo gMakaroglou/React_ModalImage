@@ -1,0 +1,23 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; }
+
+body {
+  color:red;
+  font-weight: 700;
+  line-height: 1.6; }
+
+.container {
+  display: grid;
+  grid-template-rows: 12vh 88vh min-content min-content;
+  grid-template-columns: [sidebar-start] auto [sidebar-end full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 20rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end]; }
+
+.data {
+  grid-column: full-start/full-end; }

@@ -8,7 +8,7 @@ import {
   TableRowColumn
 } from "material-ui/Table";
 import VisIcon from "material-ui/svg-icons/action/visibility";
-import Himodal from "./ImageModal"
+import ShowPhoto from "./ImageModal"
 
 class TestTable extends React.Component {
     render() {
@@ -18,7 +18,7 @@ class TestTable extends React.Component {
                       whiteSpace: "normal",
                       wordWrap: "break-word"
                     }}>
-     <Himodal user={x["user"]} image={x["imageId"]}/>
+     <ShowPhoto user={x["user"]} image={x["imageId"]}/>
      {console.log("Image "+x["imageId"])}
       </TableRowColumn>
     {header.map((y, k) =>

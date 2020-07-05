@@ -2,7 +2,7 @@ import React from 'react';
 import firebase from './firebaseconfig'
 import Modal from './modalexample' 
 
-class HelloMessage extends React.Component {
+class ImageModal extends React.Component {
     constructor () {
       super()
       this.state = {
@@ -63,7 +63,7 @@ class HelloMessage extends React.Component {
       );
     }
   }
-  export default HelloMessage;
+  export default ImageModal;
 //   ReactDOM.render(
 //     <HelloMessage name="Jane" />,
 //     document.getElementById('app')

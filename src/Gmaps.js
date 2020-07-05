@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import styles from './styles.module.css'
 export class MapContainer extends Component {
     constructor(props) {
       super(props);
@@ -44,15 +45,23 @@ export class MapContainer extends Component {
       }
       
     render() {
+      const butttonstyle = {
+        color: 'red',
+        width: '150px',
+        margintop:'100px',
+        fontsize:'100px'
+
+      }
       return (
           <div>
-          <button onClick={this.props.showonmap}>Show on Map</button>
+          <button className={styles.buttonstyle} onClick={this.props.showonmap} >Show on Map</button>
 
           <Map
             google={this.props.google}
             zoom={15}
             style={mapStyles}
             initialCenter={{ lat: 37.9740333, lng: 23.689629}}
+            style = {{width:'80%'}}
           >
             {this.displayMarkerss()}
           </Map>
@@ -66,6 +75,9 @@ export class MapContainer extends Component {
   };
   export default GoogleApiWrapper({
     apiKey: `${
-        process.env.REACT_APP_GOOGLE_KEY
-      }`
+      "AIzaSyD-sAZ5c6KNf10l_c1Ghc1vcv2SjVVy6XI"
+      }`,
+    key: `${
+      process.env.REACT_APP_GOOGLE_KEY
+    }`
   })(MapContainer);

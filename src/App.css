@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  /* font-size: 62.5%;  */
+  font-weight: 400;
+  margin-left:10%;
+  margin-right:10%;
 }
 
 .App-logo {
@@ -8,15 +12,39 @@
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
+  /* background-color: #222; */
+  
   padding: 20px;
   color: white;
+  position:relative;
+  /* background-image: url('./images/papei-logo.jpg') */
+  /* background-image: linear-gradient(rgba(85, 197, 122, 0.5), rgba(85, 197, 122, 0.5)), url(./images/papei2.png);
+  background-size: cover; */
 }
-
+.App-header::after{
+  /* bottom: 0.5rem;
+    content: '';
+    display: block;
+    height: 1px;
+    position: absolute;
+    right: 0;
+    width: calc(100%);
+    left: 0;
+    background: red; */
+    bottom:-0rem; 
+    content:"";
+    display:block;
+    height:1px;
+    position:absolute;
+    right:0;
+    left:0;
+    background:gray;
+    margin-bottom:20px;
+}
 .App-intro {
   font-size: large;
 }
+
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

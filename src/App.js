@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import ImageUpload from './ImageUpload'
-import Table from './mattable'
-import ImageModal from './ImageModal'
-import TestTable from './testtable'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FirebaseConfig from './firebaseconfig'
 import Firebase from "firebase"
@@ -13,17 +9,16 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
 import orderBy from 'lodash.orderby'
 import { Divider, Form, Label } from 'semantic-ui-react'
 import './FlexBox.css'
 import FilteringComp from './FIlteringomponent'
 import { concat } from 'bytebuffer';
-import DateTimePick from './DateTimePick'
-import DTP from './DateTimePickkk'
-import Example from './Example'
+import DTP from './DateTimePick'
 import Mattable from './newmattable'
 import Gmaps from './Gmaps'
+import styles from './styles.module.css'
+import papeilogo from './images/papei-logo.jpg'
 
 class App extends Component {
   constructor(props) {
@@ -32,49 +27,7 @@ class App extends Component {
      const firebaseApp = Firebase.initializeApp(FirebaseConfig);
     }
   this.state = {
-    data: [
-      {
-        firstName:'sdadsad',
-        lastName:"dslad",
-        username:"ds;ad;ad",
-        email:"123",
-        User:"dada@hotmail.com",
-        id:"-LtuNcdzTiWv3WPOrRFK"
-      },
-      {
-        firstName:'sdadsad',
-        lastName:"dslad",
-        username:"ds;ad;ad",
-        email:"123",
-        User:"dada@hotmail.com",
-        id:"-Lu1zEOHrZ8oEGuChq0m"
-      },
-      {
-        firstName:'sdadsad',
-        lastName:"dslad",
-        username:"ds;ad;ad",
-        email:"123",
-        User:"dada@hotmail.com",
-        id:"-Lu2-23iGiB56pToEWES"
-      },
-      {
-        firstName:'sdadsad',
-        lastName:"dslad",
-        username:"ds;ad;ad",
-        email:"123",
-        User:"dada@hotmail.com",
-        id:"-Lu2-23iGiB56pToEWES"
-      },
-      {
-        firstName:'sdadsad',
-        lastName:"dslad",
-        username:"ds;ad;ad",
-        email:"123",
-        User:"dada@hotmail.com",
-        id:"-Lu214VrqKkRCRCT1hpg"
-      }
-      
-    ],
+
     SensorValues:[],
     FirebaseData:[],
     query1:'',
@@ -103,30 +56,44 @@ class App extends Component {
     MapLocs : [],
     Mapsarray : [],
     NewMapLocs : [],
-    posremove : []
+    posremove : [],
+    loaded : false,
   };}
   testfunction = event => {
     alert(event.target.value);
   };
   componentDidMount() {
-    this.getUserData();
-    
+    if(!this.state.loaded)
+    {
+      this.getUserData();
+
+      console.log(this.state.loaded);
+    }
   }
   componentDidUpdate(){
 
   }
-  divstyle = () => {
-    marginTop  : ' 10px'
-  }
+
+
+  // divstyle = () => {
+  //   marginTop  : ' 10px'
+  // }
   getUserData = () => {
+    if(!this.state.loaded)
+    { 
     let ref = Firebase.database().ref("/SensorFoo/");
     ref.on("value", snapshot => {
       const state = snapshot.val();
-      this.setState({FirebaseData : state});
+      console.log(this.state.loaded)
+
+        this.setState({loaded : true}); 
+        console.log(this.state.loaded);
+        this.setState({FirebaseData : state});
+      
 
 
     });
-  };
+  }};
  ChangeFilterStatus = (e) => {
   let currentqueries = {...this.state.queries}
   let queryname = e.target.name
@@ -305,11 +272,11 @@ for(let record in newresultt){
   twoD[record] = new Array();
   for(let value in newresultt[record]){
 
-    if(value == "latitudeValue"){
+    if(value === "latitudeValue"){
       twoD[record]["latitude"] = newresultt[record][value]
       twoD[record].eligible=true;
     }
-    if(value =="longitudeValue"){
+    if(value ==="longitudeValue"){
       twoD[record]["longitude"] = newresultt[record][value]
       twoD[record].eligible=true;
     }
@@ -327,15 +294,15 @@ console.log(newresult[2])
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          {/* <img src={logo} className="App-logo" alt="logo" /> */}
+          <img src={papeilogo} className={styles.papeilogo} />
           <h2>Welcome to React</h2>
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          {/* To get started, edit <code>src/App.js</code> and save to reload. */}
         </p>
-        {/* <button onClick={()=>this.viewOnMaps(twoD)}>CLICK ME</button> */}
-        {/* <HelloMessage /> */}
         <MuiThemeProvider>
+          <div className="mui_div_wrapper">
           <div>
         <Fab color="primary" aria-label="add"  style={{marginLeft:'-85%'}}>
         <AddIcon onClick={this.showFilter} />
@@ -353,7 +320,6 @@ console.log(newresult[2])
            currentqueries[e.target.name] = e.target.value
            console.log("Current Queries" + currentqueries)
            this.setState({ queries: currentqueries ,query1:e.target.value}
-          //this.setState({ queries: [...this.state.queries,e.target.value] ,query1:e.target.value}
         )}}
       hintText="Search Value"
     /></div>
@@ -368,8 +334,6 @@ console.log(newresult[2])
               console.log()
               currentcolumns[("columnToQuery1")] = value
               this.setState({ columnsToQuery: currentcolumns ,columnToQuery1:value})
-            //   this.setState({columnToQuery1 : value,
-            // columnsToQuery : [...this.state.columnsToQuery,value]})
           }}
         >
           <MenuItem value={'ambTempValue'} primaryText="Ambient Temperature" />
@@ -396,7 +360,6 @@ console.log(newresult[2])
           currentqueries[e.target.name] = e.target.value
           console.log("Current Queries" + currentqueries)
           this.setState({ queries: currentqueries ,query2:e.target.value}
-         //this.setState({ queries: [...this.state.queries,e.target.value] ,query1:e.target.value}
        )}}
       hintText="Search Value"
     /></div>
@@ -404,27 +367,17 @@ console.log(newresult[2])
         <SelectField
           floatingLabelText="Confidence"
           value={this.state.columnToQuery2}
-          inputProps={{ min: "0.0", max: "1.0", step: "0.01" }}
+          inputprops={{ min: "0.0", max: "1.0", step: "0.01" }}
           onChange={(event,index,value) =>
             { 
               let currentcolumns = {...this.state.columnsToQuery}
               console.log()
               currentcolumns[("columnToQuery2")] = value
               this.setState({ columnsToQuery: currentcolumns ,columnToQuery2:value})
-            //   this.setState({columnToQuery1 : value,
-            // columnsToQuery : [...this.state.columnsToQuery,value]})
+
           }}
         >
-          {/* <MenuItem value={'ambTempValue'} primaryText="Ambient Temperature" />
-          <MenuItem value={'latitudeValue'} primaryText="Latitude" />
-          <MenuItem value={'lightValue'} primaryText="lightValue" />
-          <MenuItem value={'longitudeValue'} primaryText="Longitude" />
-          <MenuItem value={'pressureValue'} primaryText="Pressure" />
-          <MenuItem value={'tags'} primaryText="Tags" />
-          <MenuItem value={'imageLabels'} primaryText="Image Tags" />
-          <MenuItem value={'city'} primaryText="City" />
-          <MenuItem value={'tempValue'} primaryText="Temperature" />
-          <MenuItem value={'activity'} primaryText="Activity" /> */}
+
           <MenuItem value={'imageLabelsConfidence'} primaryText="imageLabelsConfidence" />
         </SelectField>
         </div>
@@ -438,204 +391,7 @@ console.log(newresult[2])
           
        <DTP onchange={this.changeDateValue} onchangeTo={this.changeDateValueTo} datevalue={this.state.dateFrom} datevalueTo={this.state.dateTo} timeTo={this.state.timeTo} timevalue={this.state.timeFrom} onTimeChange={this.changeTimeValue} onTimeChangeTo={this.changeTimeValueTo}/>
 
-        {/* <Table
-            data={//newresult
-              orderBy(
-                (this.state.query1 || this.state.query2 || this.state.query3 || this.state.query4 || this.state.query5)
-                  ? newresultt.filter(x =>
-                    {
-                      let m=0;
-                      let j=0;
-                      let columnslength = (Object.keys(this.state.columnsToQuery).length)
-                      console.log("COlumns "+columnslength)
-                      console.log("@@@"+this.state.dateFrom)
-                      console.log("@@@"+this.state.timeFrom)
-                      console.log("$$$"+this.state.dateTo)
-                      console.log("$$$"+this.state.timeTo)
-                      let datefrom = new Date(this.state.dateFrom)
-                      let dateto = new Date(this.state.dateTo)
-                      let timeto = new Date(this.state.timeTo)
-                      console.log(datefrom.getFullYear())
-                      let date3 = new Date(datefrom.getFullYear(),datefrom.getMonth(),datefrom.getDate(),timeto.getHours(),timeto.getMinutes())
-                      console.log(datefrom)
-                      console.log(dateto)
-                      console.log(date3)
-                      console.log(x["dateOfPhoto"])
-                      let datefromFB= new Date(x["dateOfPhoto"])
-                  if(datefromFB>datefrom || datefromFB<dateto){
-                    console.log("its true!")
-                    return true;
-                  }
-                      //Check if Column and Query are Defined
-                      //For Filter Box 1
-                 if(this.state.columnToQuery1!=undefined && this.state.columnToQuery1 !="" && this.state.query1!=undefined && this.state.query1 !=""){
-                   //Check if include
-                   if(this.state.columnsToQuery[("columnToQuery"+1)]=="tags")
-                   {
-                     let tagarray =(this.state.queries[("query"+1)]).split('#');
-                     let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+1)]].split('#');
-                     console.log("TAG array "+tagarray)
-                     console.log("Firebase Tag array "+Firebasetagarray)
-                    
-                     for(m=0;m<Firebasetagarray.length;m++){
-                      if(Firebasetagarray[m]!=""){
-                      for(j=0;j<tagarray.length;j++)
-                      {
-                        console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                     if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))return true;}}
-                      }
-                  }}
-                   if(x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)]))return x[this.state.columnsToQuery[("columnToQuery"+1)]].includes(this.state.queries[("query"+1)])}
-                   //For FilterBox 2
-                 if(this.state.columnToQuery2!=undefined && this.state.columnToQuery2 !="" && this.state.query2!=undefined && this.state.query2 !=""){
-                  if(this.state.columnsToQuery[("columnToQuery"+2)]=="tags")
-                  {
-                    let tagarray =(this.state.queries[("query"+2)]).split('#');
-                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split('#');
-                    console.log("TAG array "+tagarray)
-                    console.log("Firebase Tag array "+Firebasetagarray)
-                   
-                    for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
-                     for(j=0;j<tagarray.length;j++)
-                     {
-                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))return true;}}
-                     }
-                 }}
-                  if(x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)]))return x[this.state.columnsToQuery[("columnToQuery"+2)]].includes(this.state.queries[("query"+2)])}
-                  //For FilterBox 3
-                 if(this.state.columnToQuery3!=undefined && this.state.columnToQuery3 !="" && this.state.query3!=undefined && this.state.query3 !=""){
-                  if(this.state.columnsToQuery[("columnToQuery"+3)]=="tags")
-                  {
-                    let tagarray =(this.state.queries[("query"+3)]).split('#');
-                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+3)]].split('#');
-                    console.log("TAG array "+tagarray)
-                    console.log("Firebase Tag array "+Firebasetagarray)
-                   
-                    for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
-                     for(j=0;j<tagarray.length;j++)
-                     {
-                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))return true;}}
-                     }
-                 }}
-                  if(x[this.state.columnsToQuery[("columnToQuery"+3)]].includes(this.state.queries[("query"+3)]))return x[this.state.columnsToQuery[("columnToQuery"+3)]].includes(this.state.queries[("query"+3)])}
-                  //For FilterBox 4
-                 if(this.state.columnToQuery4!=undefined && this.state.columnToQuery4 !="" && this.state.query4!=undefined && this.state.query4 !=""){
-                  if(this.state.columnsToQuery[("columnToQuery"+4)]=="tags")
-                  {
-                    let tagarray =(this.state.queries[("query"+4)]).split('#');
-                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+4)]].split('#');
-                    console.log("TAG array "+tagarray)
-                    console.log("Firebase Tag array "+Firebasetagarray)
-                   
-                    for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
-                     for(j=0;j<tagarray.length;j++)
-                     {
-                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))return true;}}
-                     }
-                 }}
-                  if(x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)]))return x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)])}
-                  //For FilterBox 5
-                 if(this.state.columnToQuery5!=undefined && this.state.columnToQuery5 !="" && this.state.query5!=undefined && this.state.query5 !=""){
-                  if(this.state.columnsToQuery[("columnToQuery"+5)]=="tags")
-                  {
-                    let tagarray =(this.state.queries[("query"+5)]).split('#');
-                    let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+5)]].split('#');
-                    console.log("TAG array "+tagarray)
-                    console.log("Firebase Tag array "+Firebasetagarray)
-                    let i =0;
-                    for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
-                     for(j=0;j<tagarray.length;j++)
-                     {
-                       console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))return true;}}
-                     }
-                 }}
-                  if(x[this.state.columnsToQuery[("columnToQuery"+5)]].includes(this.state.queries[("query"+5)]))return x[this.state.columnsToQuery[("columnToQuery"+5)]].includes(this.state.queries[("query"+5)])}                     
-                      //   {
-                      //     return x[this.state.columnsToQuery[("columnToQuery"+i)]].includes(this.state.queries[("query"+i)])
-                          
-                      //   }
-                    //   for(i=1;i<=columnslength;i++)
-                    // {
-                    //   console.log("If Column of " +x+ " "+x[this.state.columnsToQuery[("columnToQuery"+i)]])
-                    //   console.log("has "+this.state.queries[("query"+i)])
-                    //   console.log(x[this.state.columnsToQuery[("columnToQuery"+i)]].includes(this.state.queries[("query"+i)]))
-                    //   if(x[this.state.columnsToQuery[("columnToQuery"+i)]].includes(this.state.queries[("query"+i)]))
-                    //   {
-                    //     return x[this.state.columnsToQuery[("columnToQuery"+i)]].includes(this.state.queries[("query"+i)])
-                        
-                    //   }
-                    // }
-                  }
-                    )
-                  : 
-           newresultt
-             )}
-            header={[
-              // {
-              //   name: "User",
-              //   prop: "User"
-              // },
-              // {
-              //   name: "First name",
-              //   prop: "firstName"
-              // },
-              // {
-              //   name: "Last name",
-              //   prop: "lastName"
-              // },
-              // {
-              //   name: "Username",
-              //   prop: "username"
-              // },
-              // {
-              //   name: "Email",
-              //   prop: "email"
-              // }
-
-              {
-                name: "User",
-                prop: "user"
-              },
-              {
-                name: "ambTempValue",
-                prop: "ambTempValue"
-              },
-              {
-                name: "latitudeValue",
-                prop: "latitudeValue"
-              },
-              {
-                name: "lightValue",
-                prop: "lightValue"
-              },
-              {
-                name: "longitudeValue",
-                prop: "longitudeValue"
-              },
-              {
-                name: "pressureValue",
-                prop: "pressureValue"
-              },
-              {
-                name: "Tags",
-                prop: "tags"
-              },
-              {
-                name: "ImageLabels",
-                prop: "imageLabels"
-              },
-              
-
-            ]}
-          /> */}
+        {}
           <Mattable
            updateRows={this.updateSelectedRows}
            selectedRows={this.state.selrows}
@@ -682,16 +438,16 @@ console.log(newresult[2])
                       // else{
                       //   console.log("date false")
                       // }
-                      //Check if Column and Query are Defined
+                      //Check if Column and Query are 
                       //For Filter Box 1
                       cond1=false;
                       cond2=false;
                       cond3=false;
                       cond4=false;
                       cond5=false;
-                 if(this.state.columnToQuery1!=undefined && this.state.columnToQuery1 !="" && this.state.query1!=undefined && this.state.query1 !="" && x[this.state.columnsToQuery[("columnToQuery"+1)]]!=undefined){
+                 if(this.state.columnToQuery1!==undefined && this.state.columnToQuery1 !=="" && this.state.query1!==undefined && this.state.query1 !=="" && x[this.state.columnsToQuery[("columnToQuery"+1)]]!==undefined){
                    //Check if include
-                   if(this.state.columnsToQuery[("columnToQuery"+1)]=="imageLabels")
+                   if(this.state.columnsToQuery[("columnToQuery"+1)]==="imageLabels")
                    {
                      let tagarray =(this.state.queries[("query"+1)]).split(',');
                      let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+1)]].split(',');
@@ -699,20 +455,20 @@ console.log(newresult[2])
                      console.log("Firebase Tag array "+Firebasetagarray)
                     
                      for(m=0;m<Firebasetagarray.length;m++){
-                      if(Firebasetagarray[m]!=""){
+                      if(Firebasetagarray[m]!==""){
                       for(j=0;j<tagarray.length;j++)
                       {
                         console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                     if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim())){
+                     if(tagarray[j]!==""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim())){
                       if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                         //return true; 
                        // cond1=true;
-                        if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                        if(this.state.columnsToQuery[("columnToQuery"+2)]==="imageLabelsConfidence")
                       {
                         console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
                         let confidencevalue = parseFloat(this.state.queries[("query"+2)])
-                        if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                        if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!==undefined)
                         {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
                         console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
                          if(Firebaseconfarray[m]>confidencevalue)
@@ -741,8 +497,8 @@ console.log(newresult[2])
                   }
                   }
                    //For FilterBox 2
-                 if(this.state.columnToQuery2!=undefined && this.state.columnToQuery2 !="" && this.state.query2!=undefined && this.state.query2 !="" && x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined){
-                  if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabels")
+                 if(this.state.columnToQuery2!==undefined && this.state.columnToQuery2 !=="" && this.state.query2!==undefined && this.state.query2 !=="" && x[this.state.columnsToQuery[("columnToQuery"+2)]]!==undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+2)]==="imageLabels")
                   {
                     let tagarray =(this.state.queries[("query"+2)]).split(',');
                     let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
@@ -750,11 +506,11 @@ console.log(newresult[2])
                     console.log("Firebase Tag array "+Firebasetagarray)
                    
                     for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
+                     if(Firebasetagarray[m]!==""){
                      for(j=0;j<tagarray.length;j++)
                      {
                        console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                    if(tagarray[j]!==""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
                      { if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                       console.log("date true")
                       //return true;
@@ -781,8 +537,8 @@ console.log(newresult[2])
                   }
                 }}else{cond2=true;}
                   //For FilterBox 3
-                 if(this.state.columnToQuery3!=undefined && this.state.columnToQuery3 !="" && this.state.query3!=undefined && this.state.query3 !="" && x[this.state.columnsToQuery[("columnToQuery"+3)]]!=undefined){
-                  if(this.state.columnsToQuery[("columnToQuery"+3)]=="imageLabels")
+                 if(this.state.columnToQuery3!==undefined && this.state.columnToQuery3 !=="" && this.state.query3!==undefined && this.state.query3 !=="" && x[this.state.columnsToQuery[("columnToQuery"+3)]]!==undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+3)]==="imageLabels")
                   {
                     let tagarray =(this.state.queries[("query"+3)]).split(',');
                     let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+3)]].split(',');
@@ -790,20 +546,20 @@ console.log(newresult[2])
                     console.log("Firebase Tag array "+Firebasetagarray)
                    
                     for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
+                     if(Firebasetagarray[m]!==""){
                      for(j=0;j<tagarray.length;j++)
                      {
                        console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                    if(tagarray[j]!==""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
                       {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                       //  return true;
                      // cond3=true;
-                      if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                      if(this.state.columnsToQuery[("columnToQuery"+2)]==="imageLabelsConfidence")
                       {
                         console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
                         let confidencevalue = parseFloat(this.state.queries[("query"+2)])
-                        if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                        if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!==undefined)
                         {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
                         console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
                          if(Firebaseconfarray[m]>confidencevalue)
@@ -832,8 +588,8 @@ console.log(newresult[2])
                 }
                 }else{cond3=true;}
                   //For FilterBox 4
-                 if(this.state.columnToQuery4!=undefined && this.state.columnToQuery4 !="" && this.state.query4!=undefined && this.state.query4 !="" && x[this.state.columnsToQuery[("columnToQuery"+4)]]!=undefined){
-                  if(this.state.columnsToQuery[("columnToQuery"+4)]=="imageLabels")
+                 if(this.state.columnToQuery4!==undefined && this.state.columnToQuery4 !=="" && this.state.query4!==undefined && this.state.query4 !=="" && x[this.state.columnsToQuery[("columnToQuery"+4)]]!==undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+4)]==="imageLabels")
                   {
                     let tagarray =(this.state.queries[("query"+4)]).split(',');
                     let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+4)]].split(',');
@@ -841,20 +597,20 @@ console.log(newresult[2])
                     console.log("Firebase Tag array "+Firebasetagarray)
                    
                     for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
+                     if(Firebasetagarray[m]!==""){
                      for(j=0;j<tagarray.length;j++)
                      {
                        console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                    if(tagarray[j]!==""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
                       {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                        // return true;
                        //cond4=true;
-                       if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                       if(this.state.columnsToQuery[("columnToQuery"+2)]==="imageLabelsConfidence")
                        {
                          console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
                          let confidencevalue = parseFloat(this.state.queries[("query"+2)])
-                         if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                         if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!==undefined)
                          {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
                          console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
                           if(Firebaseconfarray[m]>confidencevalue)
@@ -887,8 +643,8 @@ console.log(newresult[2])
                   console.log("cond 4 undefined")
                   cond4=true;}
                   //For FilterBox 5
-                 if(this.state.columnToQuery5!=undefined && this.state.columnToQuery5 !="" && this.state.query5!=undefined && this.state.query5 !="" && x[this.state.columnsToQuery[("columnToQuery"+5)]]!=undefined){
-                  if(this.state.columnsToQuery[("columnToQuery"+5)]=="imageLabels")
+                 if(this.state.columnToQuery5!==undefined && this.state.columnToQuery5 !=="" && this.state.query5!==undefined && this.state.query5 !=="" && x[this.state.columnsToQuery[("columnToQuery"+5)]]!==undefined){
+                  if(this.state.columnsToQuery[("columnToQuery"+5)]==="imageLabels")
                   {
                     let tagarray =(this.state.queries[("query"+5)]).split(',');
                     let Firebasetagarray = x[this.state.columnsToQuery[("columnToQuery"+5)]].split(',');
@@ -896,20 +652,20 @@ console.log(newresult[2])
                     console.log("Firebase Tag array "+Firebasetagarray)
                     let i =0;
                     for(m=0;m<Firebasetagarray.length;m++){
-                     if(Firebasetagarray[m]!=""){
+                     if(Firebasetagarray[m]!==""){
                      for(j=0;j<tagarray.length;j++)
                      {
                        console.log("Checking "+Firebasetagarray[m].trim()+" with "+tagarray[j].trim());
-                    if(tagarray[j]!=""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
+                    if(tagarray[j]!==""){if(Firebasetagarray[m].trim().includes(tagarray[j].trim()))
                       {if(datefromFB>fulldatefrom && datefromFB<fulldateto){
                         console.log("date true")
                        // return true;
                        //cond5=true;
-                       if(this.state.columnsToQuery[("columnToQuery"+2)]=="imageLabelsConfidence")
+                       if(this.state.columnsToQuery[("columnToQuery"+2)]==="imageLabelsConfidence")
                        {
                          console.log(x[this.state.columnsToQuery[("columnToQuery"+2)]])
                          let confidencevalue = parseFloat(this.state.queries[("query"+2)])
-                         if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!=undefined)
+                         if(x[this.state.columnsToQuery[("columnToQuery"+2)]]!==undefined)
                          {let Firebaseconfarray = x[this.state.columnsToQuery[("columnToQuery"+2)]].split(',');
                          console.log("checking "+Firebaseconfarray[m]+" with "+confidencevalue)
                           if(Firebaseconfarray[m]>confidencevalue)
@@ -1012,8 +768,9 @@ console.log(newresult[2])
 
             ]}
           />
+          </div>
       </MuiThemeProvider>
-      <Gmaps markers ={this.state.Mapsarray} showonmap={()=>this.viewOnMaps(this.state.NewMapLocs)}/>
+      <Gmaps style={{margintop:"100px"}} markers ={this.state.Mapsarray} showonmap={()=>this.viewOnMaps(this.state.NewMapLocs)}/>
       </div>
     );
   }

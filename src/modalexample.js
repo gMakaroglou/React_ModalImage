@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Header,Image, Icon, Modal } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
+import styles from './styles.module.css'
 
 export default class ModalExampleControlled extends Component {
   state = { modalOpen: false }
@@ -13,7 +14,7 @@ export default class ModalExampleControlled extends Component {
 
     return (
       <Modal
-        trigger={<Button onClick={this.handleOpen}>View Image</Button>}
+        trigger={<Button className={styles.buttonstyle} onClick={this.handleOpen}>View Image</Button>}
         open={this.state.modalOpen}
         onClose={this.handleClose}
         basic
