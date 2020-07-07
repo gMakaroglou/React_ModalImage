@@ -821,7 +821,7 @@ class App extends Component {
                             console.log(
                               "Firebase Tag array " + Firebasetagarray
                             );
-
+                            let i = 0;
                             for (m = 0; m < Firebasetagarray.length; m++) {
                               if (Firebasetagarray[m] !== "") {
                                 for (j = 0; j < tagarray.length; j++) {
@@ -845,8 +845,8 @@ class App extends Component {
                                         datefromFB < fulldateto
                                       ) {
                                         console.log("date true");
-                                        //  return true;
-                                        // cond3=true;
+                                        // return true;
+                                        //cond5=true;
                                         if (
                                           this.state.columnsToQuery[
                                             "columnToQuery" + 2
@@ -885,11 +885,10 @@ class App extends Component {
                                               confidencevalue
                                             ) {
                                               cond4 = true;
-                                              console.log("passed conftest4");
                                               console.log("passed conftest");
                                             }
                                           } else {
-                                            cond3 = true;
+                                            cond4 = true;
                                             console.log("passed conftest4");
                                           }
                                         }
@@ -914,8 +913,9 @@ class App extends Component {
                               datefromFB < fulldateto
                             ) {
                               console.log("date true");
-                              // return x[this.state.columnsToQuery[("columnToQuery"+4)]].includes(this.state.queries[("query"+4)])
-                              cond3 = true;
+                              // return x[this.state.columnsToQuery[("columnToQuery"+5)]].includes(this.state.queries[("query"+5)])
+                              cond4 = true;
+                              console.log("passed conftest4");
                             } else {
                               console.log("date false");
                             }
